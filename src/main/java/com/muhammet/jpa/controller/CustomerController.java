@@ -29,4 +29,9 @@ public class CustomerController {
         List<Customer> customerList = customerService.getAllCustomer();
         return ResponseEntity.ok(customerList);
     }
+
+    @GetMapping("/get-by-name")
+    public ResponseEntity<List<Customer>> getCustomerByName(String name){
+      return ResponseEntity.ok(customerService.getCustomerByName(name));
+    }
 }

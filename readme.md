@@ -8,3 +8,12 @@
 
     sfsdfdsfsdf
 
+```bash
+    md newfile
+```
+
+```java
+public void topla(){
+    
+}
+```
