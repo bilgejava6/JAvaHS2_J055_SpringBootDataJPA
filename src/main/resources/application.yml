@@ -1,0 +1,16 @@
+# Apache Tomcat icin server port ayarlamasi
+server:
+  port: 9090
+
+# Hibernate icin ve JDBC baglantilari icin configleri yaziyoruz.
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5435/spring_jpa
+    username: postgres
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+
