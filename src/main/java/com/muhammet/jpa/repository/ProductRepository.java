@@ -1,6 +1,7 @@
 package com.muhammet.jpa.repository;
 
 import com.muhammet.jpa.entity.Product;
+import com.muhammet.jpa.view.VwProduct;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -116,7 +117,7 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     /**
      * Distinct -> belli alanlar için tekilleştirme yapmak üzere kullanılır.
      */
-    List<Product> findDistinctByAllByModel(String model);
+    List<Product> findDistinctByModel(String model);
 
     /**
      * Eğer bir alan Date olarak kullanılıyor ise, sorgu yaparken bu tarihten önce
@@ -146,8 +147,11 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
      * Query ile sorgulama yapmak
      *
      * JPQL -> Jakarta Persistence Query Language
+     * select p from Product p
      * HQL -> Hibernate Query Language
+     * from Product
      * NATIVESQL -> SQL sorgulaması
+     * select * from Product
      *
      * @Query -> bu üzerinde geldiği methodun oluşturması gereken sorguyu tarif eder ve
      * method içeridinden alınacak parametreleri alır ve dönüş yapacağı değeri bulur.
@@ -156,6 +160,30 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     @Query("select p from Product p where p.model = ?1")
     List<Product> eySpringModelAdinaGoreBanaUrunleriGetirirMisin(String modeAdi);
 
+    @Query("select p from Product p where p.model= ?2 and p.price = ?1")
+    List<Product> getirModelAdinaGoreVeFiyatinaGore(Double fiyat, String model);
+
+    @Query(nativeQuery = true, value = "select * from Product")
+    List<Product> tumUrunleriGetir();
+
+    /**
+     * adı xxx olan herhangi bir ürün var mıdır?
+     */
+    @Query("select COUNT(p)>0 from Product p where p.name = ?1")
+    Boolean varMidirAdiSuOlanUrun(String urunAdi);
+
+    /**
+     *
+     * Bazen, bir tabloda var olan tüm alanları almak istemeyiz, çünkü performans için
+     * çok kötü sonuçlar doğurabilir. Bu nedenle ihtiyacımız olan alanları almalıyız.
+     * View -> bellli alanları seçmek ya da join ile birleştirilmiş özel tabloları
+     * kullanmak için hazır yapılar oluşturur.
+     *
+     * select name, price, image from tblproduct
+     *
+     */
+    @Query("select new com.muhammet.jpa.view.VwProduct(p.name,p.price,p.image) from Product  p")
+    List<VwProduct> findAllView();
 
 
 

@@ -15,6 +15,17 @@ import java.util.List;
 @RequestMapping("/customer")
 @RequiredArgsConstructor
 public class CustomerController {
+
+    /**
+     * Temel görevi,
+     * Kullanıcıdan doğru bilginin alınması ile ilgili sorumluluğu vardır.
+     * -- UserName -> gelen bilginin boş olmaması, belli kriterlere uygun olması min 8 max 64 olması
+     * -- Email -> girilen bilginin e-posta şeklinde gönderilmiş olması
+     * tüm bu ve buna benzer kontrolleri bu katmanda yaparız ve doğru olmayan tüm istekleri direkt
+     * olarak red ederiz.
+     *
+     */
+
     private final CustomerService customerService;
 
     @PostMapping("/add-customer")
