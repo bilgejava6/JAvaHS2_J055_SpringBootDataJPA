@@ -2,8 +2,11 @@ package com.muhammet.jpa.repository;
 
 import com.muhammet.jpa.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product,Long> {
     /**
@@ -55,6 +58,105 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     List<Product> findAllByNameStartingWith(String name);
     List<Product> findAllByNameEndingWith(String name);
     List<Product> findAllByNameContaining(String name);
+
+    /**
+     * belli bir alan adına göre sıralama işlemi
+     * ORDERBY
+     * ASC -> a..z
+     * DESC -> z..a
+     * select * from tblproduct orderby price asc
+     * select * from tblproduct where model = ? orderby price asc
+     */
+    List<Product> findAllByOrderByPriceAsc();
+    List<Product> findAllByOrderByPriceDesc();
+    List<Product> findAllByModelOrderByPriceAsc(String model);
+
+    // List<Product> findAllByFiyat(Double fiyat);
+
+    /**
+     * Belli bir miktarda sonuç almak
+     * select * from tblproduct limit - top 10
+     * DİKKAT!!!
+     * findAllBy -> tümünü getir
+     * findBy -> bulduğunu getir,
+     * findTopBy -> 1 kayıt getir.
+     * findTop5By -> 5 kayıt getir.
+     */
+    Product findTopByOrderByPriceDesc(); // fiyatı en yüksek olan ürün
+    List<Product> findTop3ByOrderByPriceAsc(); // fiyatı en ucuz olan ilk 3 ürün
+
+    /**
+     * select * from product where price>=20 and price<=100
+     */
+    List<Product> findAllByPriceBetween(Double lowPrice, Double highPrice);
+    List<Product> findAllByModelAndPriceBetween(String model,Double lowPrice,Double highPrice );
+
+    /**
+     * DİKKAT!!!!!
+     * Optional temel olarak bir değer alır, içerisine gelen değer
+     * ya vardır(present) ya da yoktur(empty) bu nedenle sorgularınızı
+     * yazarken sorgu neticesinde gelen değerin Tek bir sonuç döndüğünden
+     * emin olun. aksi halde uygulama hata verir.
+     *
+     */
+    //Optional<Product> findOptionalByUserNameAndPassword(String userName, String password);
+    // HATALI!!! neden çünkü aynı model olan bir sürü ürün olabilir.
+    // Optional<Product> findOptionalByModel(String model);
+
+    /**
+     * kayıt ile ilgili durumunu belirten true/false bir alanımız olsun mesela isDelete
+     * bu alanın sorgulanarak liste çekme işleminde kolaylık için True/False sorgusu
+     * yapılabilir.
+     */
+    List<Product> findAllByIsDelete(Boolean isDelete); // true-false ona göre listeleme yapar.
+    List<Product> findAllByIsDeleteTrue(); // select * from tblproduct where isDelete = true
+    List<Product> findAllByIsDeleteFalse();
+
+
+    /**
+     * Distinct -> belli alanlar için tekilleştirme yapmak üzere kullanılır.
+     */
+    List<Product> findDistinctByAllByModel(String model);
+
+    /**
+     * Eğer bir alan Date olarak kullanılıyor ise, sorgu yaparken bu tarihten önce
+     * yada sonra şeklinde yazmak için
+     * Before, After kullanılır.
+     */
+    // List<Product> findAllByCreateDateBefore(Date date);
+    // List<Product> findAllByCreateDateAfter(Date date);
+
+
+    /**
+     * IsNull, IsNotNull
+     * bir alanın null olup olmadığını irdelemek için kullanılan sorgular
+     */
+    List<Product> findAllByImageIsNull();
+    List<Product> findAllByImageIsNotNull();
+
+    /**
+     * In -> belli bir alanda birden fazla değer aramak için kullanılırç.
+     *
+     * select * from tblproduct where id in (212,121,12,121,21,3423,42,543)
+     */
+    List<Product> findAllByModelIn(List<String> models);// where model in ('','','','')
+
+
+    /***
+     * Query ile sorgulama yapmak
+     *
+     * JPQL -> Jakarta Persistence Query Language
+     * HQL -> Hibernate Query Language
+     * NATIVESQL -> SQL sorgulaması
+     *
+     * @Query -> bu üzerinde geldiği methodun oluşturması gereken sorguyu tarif eder ve
+     * method içeridinden alınacak parametreleri alır ve dönüş yapacağı değeri bulur.
+     *
+     */
+    @Query("select p from Product p where p.model = ?1")
+    List<Product> eySpringModelAdinaGoreBanaUrunleriGetirirMisin(String modeAdi);
+
+
 
 
 }

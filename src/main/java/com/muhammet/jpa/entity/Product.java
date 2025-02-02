@@ -22,4 +22,5 @@ public class Product {
     Long modelDate;
     Integer stock;
     String image;
+    Boolean isDelete;
 }
