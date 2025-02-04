@@ -19,5 +19,6 @@ public class RestApis {
     public static final String GET_BY_NAME = "/get-by-name";
     public static final String GET_ALL_BY_MODEL = "/get-all-by-model";
     public static final String DO_REGISTER = "/do-register";
+    public static final String DO_LOGIN = "/do-login";
 
 }
