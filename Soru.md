@@ -10,4 +10,9 @@
     - endpoint ler statik lerden alınsın (RestApis)
     - 2 Adet endpoint olacak addKitap, listKitap
     - mulkata DTO kullanılacak addKitapRequestDto, BaseResponse
+    EK
+    - kitap sayfa sayısı x den büyük yada küçük olanların listesi
+    - yazarı X olan kitapların listesi
+    - adında X geçen kitapların listesi
+
     

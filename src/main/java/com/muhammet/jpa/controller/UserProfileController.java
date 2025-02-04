@@ -1,9 +1,14 @@
 package com.muhammet.jpa.controller;
 
+import com.muhammet.jpa.dto.response.BaseResponse;
 import com.muhammet.jpa.entity.UserProfile;
+import com.muhammet.jpa.exception.ErrorType;
+import com.muhammet.jpa.exception.JavaBoostHs2Exception;
 import com.muhammet.jpa.service.UserProfileSerive;
+import jdk.jshell.spi.ExecutionControl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -50,5 +55,18 @@ public class UserProfileController {
     public ResponseEntity<List<UserProfile>> getAll(){
         List<UserProfile> allProfiles = userProfileSerive.getAll();
         return ResponseEntity.ok(allProfiles);
+    }
+
+    @PostMapping("/toplama")
+    public ResponseEntity<BaseResponse<Integer>> toplama(Integer sayi1, Integer sayi2){
+        int toplam;
+        if(sayi1 == 0 && sayi2 == 0) throw new JavaBoostHs2Exception(ErrorType.ZERO_NUMBER_ERROR);
+        toplam = sayi1 + sayi2;
+        return ResponseEntity.ok(BaseResponse.<Integer>builder()
+                        .message("Toplama işlemi yapıldı")
+                        .data(toplam)
+                        .isSuccess(true)
+                        .code(200)
+                .build());
     }
 }
